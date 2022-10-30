@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,12 +27,12 @@ public class UserController {
 
 
 	@PostMapping(path = "/user-select", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserSelect createUserSelect( @Valid UserSelectRequest userSelect){
+	public UserSelect createUserSelect( @RequestBody @Valid UserSelectRequest userSelect){
 		return repository.save(new UserSelect(userSelect.getName(), userSelect.getSectors(), userSelect.isAgreedWithTerms()));
 	}
 
 	@PutMapping(path = "/user-select/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserSelect updateUserSelect(@PathVariable("id") final long id, @Valid UserSelectRequest userSelect){
+	public UserSelect updateUserSelect(@PathVariable("id") final long id, @RequestBody @Valid UserSelectRequest userSelect){
 		var entity = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
 		entity.update(userSelect.getName(), userSelect.getSectors(), userSelect.isAgreedWithTerms());
